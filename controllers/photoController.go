@@ -117,8 +117,10 @@ func DeletePhoto(c *gin.Context) {
 	db := database.GetDB()
 	
 	Photo := models.Photo{}
+	Comment := models.Comment{}
 	photoId, _ := strconv.Atoi(c.Param("photoId"))
 
+	_ = db.Debug().Where("photo_id = ?", photoId).Delete(&Comment).Error
 	err := db.Where("id = ?", photoId).Delete(&Photo).Error
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

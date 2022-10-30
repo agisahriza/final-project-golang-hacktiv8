@@ -126,11 +126,20 @@ func UpdateUser(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 	db := database.GetDB()
 	userData := c.MustGet("userData").(jwt.MapClaims)
-
+	fmt.Println(userData)
+	
 	User := models.User{}
+	SocialMedia := models.SocialMedia{}
+	Comment := models.Comment{}
+	Photo := models.Photo{}
 	userID := uint(userData["id"].(float64))
-
-	err := db.Where("id = ?", userID).Delete(&User).Error
+	
+	_ = db.Debug().Where("user_id = ?", userID).Delete(&Comment).Error
+	_ = db.Debug().Where("user_id = ?", userID).Delete(&SocialMedia).Error
+	_ = db.Debug().Where("user_id = ?", userID).Delete(&Photo).Error
+	err := db.Debug().Where("id = ?", userID).Delete(&User).Error
+	// fmt.Println(User)
+	// err := db.
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":   "Bad Request",

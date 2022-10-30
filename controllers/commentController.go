@@ -66,7 +66,7 @@ func GetAllComments(c *gin.Context) {
 		var User models.User
 		var Photo models.Photo
 		_ = db.First(&User, "id = ?", comment.UserID).Error
-		_ = db.First(&User, "id = ?", comment.PhotoID).Error
+		_ = db.First(&Photo, "id = ?", comment.PhotoID).Error
 		PrintComment.ID = comment.ID
 		PrintComment.Message = comment.Message
 		PrintComment.PhotoID = comment.PhotoID
@@ -81,6 +81,8 @@ func GetAllComments(c *gin.Context) {
 		PrintComment.Photo.Caption = Photo.Caption
 		PrintComment.Photo.PhotoUrl = Photo.PhotoUrl
 		PrintComment.Photo.UserID = Photo.UserID
+
+		PrintComments = append(PrintComments, PrintComment)
 	}
 	
 	c.JSON(http.StatusOK, PrintComments)
